@@ -1,8 +1,9 @@
-import React from 'react'
+import React  from 'react'
 
 
 const Home = () => (
 
+  
     
   <div>
       <h3>this the Xolos Home</h3>

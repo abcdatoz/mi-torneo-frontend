@@ -7,7 +7,7 @@ export const  LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const  REGISTER_FAIL = 'REGISTER_FAIL'
 export const  LOGIN_FAIL = 'LOGIN_FAIL'
 
-const urlbase ='http://localhost:8080/api/'
+const urlbase ='http://localhost:8090/api/'
 
 export const  login = (username, password) => dispatch => {
     
@@ -17,23 +17,10 @@ export const  login = (username, password) => dispatch => {
         }
     };
 
-
-    // nextia    
-    // const body = JSON.stringify( {
-    //     "user":{
-    //         "email": "prueba@nextia.mx",
-    //         "password": "PruebaNextia2021"
-    //     }
-    // })
-    
-
+ 
     const body = JSON.stringify({username, password})    
 
-    
-    //nextia
-    //axios.post( urlbase + 'auth/signin', body, config)
-    //axios.post( 'https://prueba-api.nextia.mx/api/v1/login', body, config)
-    
+ 
     
     axios.post( urlbase + 'auth/signin', body, config)
     .then(res => {
@@ -82,21 +69,7 @@ export const logout = () => (dispatch, getstate) =>{
 }
 
 
-
-//nextia
-/*
-
-
-export const tokenConfig = getState =>{
-    const token = getState().auth.accessToken
-
-    const config = {
-        headers: {authorization: `${token}`}
-    }
-
-    return config
-}
-*/
+ 
 
 export const tokenConfig = getState => {
     const token = getState().auth.accessToken;

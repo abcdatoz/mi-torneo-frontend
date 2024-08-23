@@ -12,6 +12,8 @@ class Header extends Component {
         const authLinks = (
             <ul className="mainnav">                
                 <li><Link  to="/">Home</Link></li>
+                <li><Link  to="/torneos">Torneos</Link></li>                                                
+                <li><Link  to="/equipos">Equipos</Link></li>                                                
                 <li><Link  to="/bugs">Bugs</Link></li>                                                
                 
 
