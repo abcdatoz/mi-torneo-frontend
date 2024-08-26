@@ -263,12 +263,12 @@ const Rol = () => {
     const addGame = () =>{
 
         if (fecha == ''){
-            alert('No ha indicado la fecha del juego')
+            toast.warning('No ha indicado la fecha del juego')
             return
         }
 
         if (hora == '' || minuto == ''){
-            alert('No ha indicado la hora y minuto del juego')
+            toast.warning('No ha indicado la hora y minuto del juego')
             return
         }
 
@@ -291,8 +291,8 @@ const Rol = () => {
             arr.sort((a,b) => a.hora - b.hora)
 
             setNewJornada(arr)            
-            setHora('')
-            setMinuto('')            
+            //setHora('')
+            //setMinuto('')            
 
             arr = newRol.filter(x=> x.equipoA != newGame.equipoA)
 
@@ -323,7 +323,7 @@ const Rol = () => {
 
     }
 
-
+    //trasladar juegos a jornada
     const crearNuevaJornada = () => {
         
         if (newJornada.length == 0){

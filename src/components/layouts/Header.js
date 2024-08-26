@@ -4,44 +4,68 @@ import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
 
 
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 
 class Header extends Component {
     render () {
         const { isAuthenticated, username } = this.props.auth
 
-        const authLinks = (
-            <ul className="mainnav">                
-                <li><Link  to="/">Home</Link></li>
-                <li><Link  to="/torneos">Torneos</Link></li>                                                
-                <li><Link  to="/equipos">Equipos</Link></li>                                                
-                <li><Link  to="/juegos">Juegos</Link></li>      
-                <li><Link  to="/rol">Nuevo Rol</Link></li>      
-                
-                <li> <span><strong>{username ? `Usuario:  ${username}` : ""}</strong></span></li>   
-                <li> <a href="#" onClick={this.props.logout }>Salir</a> </li>   
+ 
 
-            </ul>
+        const authLinks = (
+            
+
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Link href="/">Estadisticas</Nav.Link>
+                    <Nav> <div style={{ backgroundColor: 'white', width:'100px'}}>:::</div> </Nav>
+                    <Nav.Link href="/torneos">Torneos</Nav.Link>
+                    <Nav.Link href="/equipos">Equipos</Nav.Link>
+                    <Nav.Link href="/juegos">Juegos</Nav.Link>
+                    <Nav.Link href="/rol">Nuevo Rol</Nav.Link>
+                </Nav>
+                
+                <Nav> <div style={{ backgroundColor: 'white', width:'500px'}}>:::</div> </Nav>
+                
+                <Nav>
+                    <Nav.Link href="#"><span><strong>{username ? `Usuario:  ${username}` : ""}</strong></span></Nav.Link>                    
+                    <Nav.Link href="#" onClick={this.props.logout }>Salir</Nav.Link>                    
+                </Nav>
+            </Navbar.Collapse> 
         )
 
 
+
         const guestLinks = (
-            <ul className="mainnav">                 
-                <li><Link  to="/register">Register</Link></li>
-                <li><Link  to="/login">Login</Link></li>
-                <li><Link  to="/">Home</Link></li>
-            </ul>
+             
+
+            <Navbar.Collapse id="responsive-navbar-nav">                
+                <Nav> <div style={{ backgroundColor: 'white', width:'500px'}}>:::</div> </Nav>
+                <Nav>
+                    <Nav.Link href="/login">Login</Nav.Link>                    
+                </Nav>
+            </Navbar.Collapse>            
             
         )
 
 
-
         return (
-            <nav>
-                {isAuthenticated 
-                    ? authLinks
-                    : guestLinks
-                }
-            </nav>
+         
+
+            <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+            <Container>
+            <Navbar.Brand href="/">Mi-Torneo</Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            
+                 {isAuthenticated 
+                     ? authLinks
+                     : guestLinks
+                 }
+            
+            </Container>
+            </Navbar>
         )
     }
 }

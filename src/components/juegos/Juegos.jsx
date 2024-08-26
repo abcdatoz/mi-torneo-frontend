@@ -19,7 +19,7 @@ const Juegos = () => {
     const [nombre, setNombre] = useState('')
     const [inicia, setInicia] = useState('')
     const [termina, setTermina] = useState('')
-    const [aviso, setAviso] = useState('')
+    const [aviso, setAviso] = useState('.')
     //juego
     const [journey, setJourney] = useState('')
     const [fecha, setFecha] = useState('')
@@ -129,7 +129,7 @@ const Juegos = () => {
         setNombre('')
         setInicia('')  
         setTermina('')
-        setAviso('')
+        setAviso('.')
         setshowMyModal(false)
     }
 
@@ -370,7 +370,7 @@ const Juegos = () => {
 
 
     const finalizarJuego = () => {        
-        setMyConfirmationCloseJuego(true)
+        setMyConfirmationCloseJuego(true)        
     }
 
 
@@ -408,6 +408,10 @@ const Juegos = () => {
         
         setStatusJuego('Finalizado')
         setMyConfirmationCloseJuego(false)
+
+        setIdJuego('');  
+        setIdTeamA('');  
+        setIdTeamB('')
 
     }
 
@@ -508,6 +512,17 @@ const Juegos = () => {
     )
          
 
+    const getRowColor = (status) => {
+        switch (status) {
+          case 'Abierto':
+            return 'yellow';
+          case 'Finalizado':
+            return 'white';          
+          default:
+            return 'white';
+        }
+      };
+
 
     const listaJornadas = (
         <>        
@@ -551,7 +566,8 @@ const Juegos = () => {
                                     ? null 
                                     : (<> <br/> Al   {jornada.termina.substring(8,10)}/{jornada.termina.substring(5,7)}/{jornada.termina.substring(0,4)} </>)
                                    
-                                 }
+                                 }                                 
+                                 <br />
                                 <table>
                                     <thead>
                                     <th width="10%">Fecha</th>
@@ -575,7 +591,7 @@ const Juegos = () => {
                                         juegos
                                         .filter(x=> x.torneoId == torneo && x.jornadaId == jornada.id)
                                         .map(juego => (
-                                            <tr key={juego.id}  >
+                                            <tr key={juego.id} style={{ backgroundColor: getRowColor(juego.status) }} >
                                                 <td>{juego.fecha.substring(0,10)}</td>
                                                 <td> </td>
                                                 <td>{juego.hora} : {juego.minuto}</td>
@@ -664,6 +680,8 @@ const Juegos = () => {
                                 </div>
                                 
                             </div>
+
+                            <br /><br />
                                 
                             </li>
                         )
@@ -692,10 +710,14 @@ const Juegos = () => {
             
             <h5>{ nombreTorneo }</h5>
             <h3>{ nombreJornada }</h3>
-                
-            <button  onClick={() => {setIdJuego('');  setIdTeamA('');  setIdTeamB('')}} className="btn btn-outline-success" >
-                regresar
-            </button> 
+
+            <div className='row-container'>
+
+                <div>
+                    <button  onClick={() => {setIdJuego('');  setIdTeamA('');  setIdTeamB('')}} className="btn btn-outline-success" >
+                        regresar
+                    </button> 
+                </div>    
 
 
             {
@@ -709,18 +731,26 @@ const Juegos = () => {
                         )
                         : (
                             <>
-                                <button  onClick={() => eliminarJuego()} className="btn btn-outline-danger" >
-                                    Eliminar Juego
-                                </button>                                                                        
-                                <button  onClick={() => finalizarJuego()} className="btn btn-outline-success" >
-                                    Finalizar Partido
-                                </button>                                                                        
+                                <div>
+                                    <button  onClick={() => eliminarJuego()} className="btn btn-outline-danger" >
+                                        Eliminar Juego
+                                    </button>                                                                        
+                                </div>
+
+                                <div>
+                                    <button  onClick={() => finalizarJuego()} className="btn btn-outline-success" >
+                                        Finalizar Partido
+                                    </button>                                                                        
+                                </div>
+                                
+                                
                             </>
 
                         )
                 }
 
             <br/>
+            </div>
 
             <div className="container">
                 <div className="row">

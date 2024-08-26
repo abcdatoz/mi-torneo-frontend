@@ -140,8 +140,8 @@ const VerJornadas = (props) => {
                          <tr>
                          <th width="50%">Jugador</th>
                          <th width="15%">Goles</th>                        
-                         <th width="15%">T. Amarilla</th>
-                         <th width="15%">T. Roja</th>
+                         <th width="10%">T. Amarilla</th>
+                         <th width="10%">T. Roja</th>
                          </tr>
                      </thead>
 
@@ -151,9 +151,20 @@ const VerJornadas = (props) => {
                          .map((item) => (
                              <tr key={item.id}  >                                    
                                  <td>{item.nombre}   </td>
-                                 <td>{item.goles} </td>                                    
-                                 <td>{item.yellowCard}</td>
-                                 <td>{item.redCard}</td>
+                                 <td>{item.goles} </td>                
+                                 {
+                                    item.yellowCard > 0
+                                    ? <td style={{backgroundColor:'yellow'}}>{item.yellowCard}</td>
+                                    : <td></td>
+
+                                 }                    
+                                 
+                                 {
+                                    item.redCard > 0
+                                    ? <td style={{backgroundColor:'red'}}>{item.redCard}</td>
+                                    : <td></td>
+                                 }     
+
                              </tr>
                          ))                            
                      }
@@ -168,8 +179,8 @@ const VerJornadas = (props) => {
                          <tr>
                          <th width="50%">Jugador</th>
                          <th width="15%">Goles</th>                        
-                         <th width="15%">T. Amarilla</th>
-                         <th width="15%">T. Roja</th>
+                         <th width="10%">T. Amarilla</th>
+                         <th width="10%">T. Roja</th>
                          </tr>
                      </thead>
 
@@ -180,8 +191,17 @@ const VerJornadas = (props) => {
                             <tr key={item.id}  >                                    
                                 <td>{item.nombre}   </td>
                                 <td>{item.goles} </td>                                    
-                                <td>{item.yellowCard}</td>
-                                <td>{item.redCard}</td>
+                                {
+                                    item.yellowCard > 0
+                                    ? <td style={{backgroundColor:'yellow'}}>{item.yellowCard}</td>
+                                    : <td></td>
+                                }     
+                                {
+                                    item.redCard > 0
+                                    ? <td style={{backgroundColor:'red'}}>{item.redCard}</td>
+                                    : <td></td>
+                                }     
+                                
                             </tr>
                          ))                            
                      }

@@ -20,7 +20,8 @@ import VerRol from './VerRol'
 import VerPendientes from './VerPendientes'
 import Team from './Team'
 
-
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 const Home = () => {
 
@@ -120,22 +121,22 @@ const Home = () => {
             <thead>
                 <th width="10%"></th>
                 <th width="20%">                    
-                    <input 
+                    {/* <input 
                             type="text"
                             placeholder="filtrar x nombre de torneo"
                             name="filtroNombre"
                             value={filtroNombre}
                             onChange={ e => setFiltroNombre(e.target.value)}
-                        />   
+                        />    */}
                 </th>
                 <th width="20%">                    
-                    <input 
+                    {/* <input 
                             type="text"
                             placeholder="filtrar x localidad donde se juega"
                             name="filtroLocalidad"
                             value={filtroLocalidad}
                             onChange={ e => setFiltroLocalidad(e.target.value)}
-                        />   
+                        />    */}
                     </th>               
                 
             </thead>     
@@ -144,19 +145,20 @@ const Home = () => {
            
 
 
-        <div className="x-container">
+        <div className="main-container">
             {
                 torneos
                     .filter (x => x.nombre.toUpperCase().includes(filtroNombre.toUpperCase()) 
                                && x.localidad.toUpperCase().includes(filtroLocalidad.toUpperCase()) )                    
                     .map( torneo => (
 
-                        <div key={torneo.id} className="x-card">
-                            <div className="x-box">
-                            <div className="x-content">
-                                <h2><img  src={"http://localhost:8090/api/resources/" + torneo.imagen} width="100" height="100"/></h2>
-                                <h3>{torneo.nombre}</h3>
-                                <p>
+                        
+                        <Card key={torneo.id} style={{ width: '18rem' }} >
+                            <Card.Img variant="top" src={"http://localhost:8090/api/resources/" + torneo.imagen} width="100" height="100" />
+                            <Card.Body>
+                                <Card.Title>{torneo.nombre}</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">{torneo.localidad}</Card.Subtitle>
+                                <Card.Text>
                                     {torneo.localidad}  
                                     <br />
                                     {numEquipos(torneo.id)} Equipos 
@@ -164,14 +166,12 @@ const Home = () => {
                                     {numJornadas(torneo.id)} Jornadas
                                     <br />
                                     {numGoles(torneo.id)} Goles
-                                </p>
+                                </Card.Text>
+                                <Card.Link href="#" onClick={ () => seeDetails(torneo, 'tabla_general')}>Estadísticas</Card.Link>
                                 
-                                
-                                <a href ="#" onClick={ () => seeDetails(torneo, 'tabla_general')}> Ver Estadísticas </a>
-                                
-                            </div>
-                            </div>
-                        </div>                     
+                            </Card.Body>
+                      </Card>
+                  
 
                 ))
             }
@@ -202,7 +202,7 @@ const Home = () => {
                         <h5>{ nombreTorneo }</h5>
             
                         
-                        <div className="team-container">                        
+                        <div className="row-container">                        
 
                             <button  onClick={() => { setTyp('tabla_general') }} className="btn btn-outline-primary" >
                                 Tabla General
