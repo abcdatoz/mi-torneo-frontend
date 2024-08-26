@@ -146,7 +146,10 @@ const MiTorneo = () => {
         
         if(mode == "edit")
             dispatch(editTorneo(formdata, id))
-        
+
+        setNombre('')
+        setLocalidad('')
+        setImagen('')
         closeModal()
 
     }

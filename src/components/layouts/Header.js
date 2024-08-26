@@ -14,16 +14,11 @@ class Header extends Component {
                 <li><Link  to="/">Home</Link></li>
                 <li><Link  to="/torneos">Torneos</Link></li>                                                
                 <li><Link  to="/equipos">Equipos</Link></li>                                                
-                <li><Link  to="/bugs">Bugs</Link></li>                                                
+                <li><Link  to="/juegos">Juegos</Link></li>      
+                <li><Link  to="/rol">Nuevo Rol</Link></li>      
                 
-
-                <li>
-                    <span><strong>{username ? `Usuario:  ${username}` : ""}</strong></span>                                                           
-                </li>   
-
-                <li>
-                   <a href="#" onClick={this.props.logout }>Salir</a>                    
-               </li>   
+                <li> <span><strong>{username ? `Usuario:  ${username}` : ""}</strong></span></li>   
+                <li> <a href="#" onClick={this.props.logout }>Salir</a> </li>   
 
             </ul>
         )

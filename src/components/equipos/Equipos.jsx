@@ -10,6 +10,7 @@ import {getJuegos} from '../../actions/JuegosActions'
 import { getGoles  } from '../../actions/GolesActions'
 
 import { Container, Row, Col, InputGroup, Modal,Form , Button} from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 const Equipos = () => {
 
@@ -24,14 +25,9 @@ const Equipos = () => {
   const [status, setStatus] = useState('')
   const [mode, setMode] = useState('new')
   const [id, setId] = useState('')
-
-  
-  const [idGrupo, setIdGrupo] = useState('')
-  const [nombreGrupo, setNombreGrupo] = useState('')
-
+   
   const [idEquipo, setIdEquipo] = useState('')
   const [nombreEquipo, setNombreEquipo] = useState('')
-
 
   const [jugadorNombre, setJugadorNombre] = useState('')
   const [jugadorStatus, setJugadorStatus] = useState('Alta')
@@ -59,11 +55,13 @@ const Equipos = () => {
 
 
   const [showMyModal, setshowMyModal] = useState(false)
-
-  const closeModal = (e) => {        
-    setshowMyModal(false);
-  }
-
+  const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
+  const [showMyModalFoto, setshowMyModalFoto] = useState(false)
+   
+  const closeModal = (e) => { setshowMyModal(false); }
+  const closeConfirmationDelete = (e) => { setShowConfirmationDelete(false)  }
+  const closeModalFoto = (e) => { setshowMyModalFoto(false); }
+ 
   
 
   useEffect(()=>{        
@@ -147,8 +145,9 @@ const eliminarJugador = (item) =>{
 
     let listagoles = goles.filter(x=> x.jugador === item.id)
 
+     
     if (listagoles.length > 0){
-        //$('#MyConfirmationNOEliminarJugador').modal('show')
+        toast.warning("Este jugador no se puede eliminar porque tiene goles")
                     
     }else{
         dispatch(deleteJugador(item.id))
@@ -159,7 +158,7 @@ const eliminarJugador = (item) =>{
 const editarImagen = (id, tipo) =>{
     setIdEquipoImage(id)
     setTipoImagen(tipo)
-    //$('#MyModalImage').modal('show')
+    setshowMyModalFoto(true)
 }
 
 const guardarImagen = (e) => {
@@ -180,7 +179,7 @@ const guardarImagen = (e) => {
 
     if (tipoImagen == 'escudo'){
 
-        let arrEscudos = equiposEscudo.filter(x=>x.equipo == idEquipoImage)
+        let arrEscudos = equiposEscudo.filter(x=>x.equipoId == idEquipoImage)
         
         arrEscudos.forEach(element => {
             dispatch(deleteEquipoEscudo(element.id))    
@@ -193,7 +192,7 @@ const guardarImagen = (e) => {
     
     if(tipoImagen == 'foto'){
 
-        let arrFotos = equiposFoto.filter(x=>x.equipo == idEquipoImage)
+        let arrFotos = equiposFoto.filter(x=>x.equipoId == idEquipoImage)
         
         arrFotos.forEach(element => {
             dispatch(deleteEquipoFoto(element.id))    
@@ -202,7 +201,7 @@ const guardarImagen = (e) => {
         dispatch(addEquipoFoto(formdata))       
     }
     
-    //$('#MyModalImage').modal('hide')
+    setshowMyModalFoto(false)
 
 }
 
@@ -252,7 +251,7 @@ const eliminar = (item) => {
     let listaJuegos = juegos.filter(x=> x.equipoA === item.id || x.equipoB === item.id)
 
     if (listaJuegos.length > 0){
-        alert('No se puede eliminar este equipo porque tiene juegos rolados')
+        toast.warning('No se puede eliminar este equipo porque tiene juegos rolados')
         return
     }
 
@@ -262,30 +261,26 @@ const eliminar = (item) => {
     let lista = jugadores.filter(x=> x.equipo === item.id)
 
     if (lista.length > 0){
-        alert('No se puede eliminar este equipo porque tiene jugadores registrados')
+        toast.warning('No se puede eliminar este equipo porque tiene jugadores registrados')
         return
     }
 
-
-
-
-
     setId(item.id)                
-    //$('#MyConfirmation').modal('show')        
+    setShowConfirmationDelete(true)        
 }
 
 const eliminarRegistro = () => {        
     dispatch(deleteEquipo(id))
-    //$('#MyConfirmation').modal('hide')        
+    setShowConfirmationDelete(false)        
 }
 
 
 const showPhoto = (id) => {
-    let arr = equiposFoto.filter(x => x.equipo == id)
+    let arr = equiposFoto.filter(x => x.equipoId == id)
 
     if (arr.length > 0 ){
-        return (
-            <img src={arr[0].imagen}  alt="imagen" width="50px" height="50px"/>
+        return (             
+            <img src={"http://localhost:8090/api/resources/" + arr[0].imagen}  alt="imagen" width="50px" height="50px"/>
         )
 
     }else{
@@ -294,11 +289,11 @@ const showPhoto = (id) => {
 }
 
 const showShield = (id) => {
-    let arr = equiposEscudo.filter(x => x.equipo == id)
+    let arr = equiposEscudo.filter(x => x.equipoId == id)
 
     if (arr.length > 0 ){
         return (
-            <img src={arr[0].imagen}  alt="imagen" width="50px" height="50px"/>
+            <img src={"http://localhost:8090/api/resources/"  + arr[0].imagen}  alt="imagen" width="50px" height="50px"/>
         )
 
     }else{
@@ -312,7 +307,8 @@ const listatorneos = (<>
 
   <table>
       <thead>
-          <th width="10%"></th>
+           
+          <th width="10%"> </th>
           <th width="50%">Nombre</th>
           <th width="10%">Localidad</th>
           <th width="10%">status</th>
@@ -324,7 +320,7 @@ const listatorneos = (<>
               .filter(x => x.status === 'alta')
               .map(torneo=>(
                   <tr key={torneo.id}>
-                      <td> <img src={torneo.imagen}  alt="imagen" width="100px" height="100px"/> </td>
+                      <td> <img src={"http://localhost:8090/api/resources/" + torneo.imagen}  alt="imagen" width="100px" height="100px"/> </td>
                       <td>{torneo.nombre}</td>
                       <td>{torneo.localidad}</td>
                       <td>{torneo.status}</td>
@@ -428,6 +424,93 @@ const MyModal = (
 
 
 
+  const MyModalConfirmation = (
+    <>
+        <Modal show={showConfirmationDelete} onHide={closeConfirmationDelete} size='ls'>
+            <Modal.Header closeButton>
+                <Modal.Title>Eliminar registro</Modal.Title>                                          
+            </Modal.Header>         
+
+            <Modal.Body>                
+                <p> ¿Esta seguro de eliminar el equipo?</p>
+            </Modal.Body>
+        
+            <Modal.Footer>
+                <Container>
+                    <Row>           
+                        <Col xs={8}></Col>                               
+
+                        <Col xs={2}>                        
+                            <Button variant='danger' onClick={eliminarRegistro}>
+                                Eliminar
+                            </Button>                        
+                        </Col>
+                        <Col xs={2}>
+                            <Button  variant='secondary' onClick={closeConfirmationDelete}>
+                                Regresar
+                            </Button>
+                        </Col>
+                        
+                    </Row>
+                </Container>
+            </Modal.Footer>
+        </Modal>
+
+    </>
+)
+
+
+const MyModalFoto = (
+    <>
+        <Modal show={showMyModalFoto} onHide={closeModalFoto} size='lg'>
+            <Modal.Header closeButton>
+            <Modal.Title>Cargar Foto </Modal.Title> 
+            </Modal.Header> 
+    
+            <Modal.Body>            
+            
+  
+  
+              
+   
+  
+                <InputGroup className="mb-2">
+                    <InputGroup.Text>Seleccione la imagen</InputGroup.Text>
+                        <input 
+                              className="form-control"
+                              type="file"
+                              name="imagen"
+                              accept="image/png, image/jpeg"
+                              onChange = { e => setImagen(e.target.files[0])}
+                              required
+                        />
+
+                </InputGroup>
+   
+            </Modal.Body>
+        
+            <Modal.Footer>
+                <Container>
+                    <Row>           
+                        <Col xs={8}></Col>                               
+  
+                        <Col xs={2}>                        
+                            <Button inverted color="green" onClick={guardarImagen}>
+                                Guardar
+                            </Button>                        
+                        </Col>
+                        <Col xs={2}>
+                            <Button  onClick={closeModalFoto}>
+                                Cancelar
+                            </Button>
+                        </Col>
+                        
+                    </Row>
+                </Container>
+            </Modal.Footer>
+        </Modal>
+    </>
+    )
 
 const listaEquipos = (
   <>        
@@ -438,85 +521,7 @@ const listaEquipos = (
       </button> 
 
 
-
-
-      
-
- 
-
-
-
-  <div className="modal fade" id="MyConfirmation" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">            
-      <div className="modal-dialog" role="document">
-          <div className="modal-content">
-          <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Mi Torneo</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          
-          <div className="modal-body"> 
-              ¿Esta seguro de eliminar el equipo?
-          </div>
-
-          <div className="modal-footer">
-              <button type="button" className="btn btn-danger" onClick={eliminarRegistro}>Eliminar</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          </div>
-          
-          
-          </div>
-      </div>
-  </div>
-
-
-  
-
-
-
-  <div className="modal fade" id="MyModalImage" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div className="modal-dialog modal-dialog-centered" role="document">
-  
-          <div className="modal-content">
-              <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLongTitle">Agregar {tipoImagen}</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              </div>
-              <div className="modal-body">
-              
-                  <form>                          
-
-                      <div className="form-group">
-                          <label>*Imagen</label>
-                          <input 
-                              className="form-control"
-                              type="file"
-                              name="imagen"
-                              accept="image/png, image/jpeg"
-                              onChange = { e => setImagen(e.target.files[0])}
-                              required
-                          />
-                      </div>
-                      
-                  </form>
-  
-              </div>
-              <div className="modal-footer">
-                  <button type="button" className="btn btn-primary" onClick={guardarImagen}>Guardar</button>
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              </div>
-          </div>
-      </div>
-  </div>
-  
-
-
-
-
-  <table className="table table-striped">
+    <table className="table table-striped">
       
       <tbody>
 
@@ -527,6 +532,8 @@ const listaEquipos = (
               <tr key={grupo.id}>
                   <td width="20%">
                       {grupo.nombre} <br/>
+
+
                       <button
                           type="button"
                           className="btn btn-outline-success"                          
@@ -534,12 +541,6 @@ const listaEquipos = (
                           >
                           + Nuevo Equipo
                       </button>
-
-                      
-
-
-
-
                   </td>
                   <td width="70%">
                       <table>
@@ -550,7 +551,7 @@ const listaEquipos = (
                           <th>Nombre</th>
                           <th>Status</th>
                           <th>Representante</th>
-                          <th>info</th>                                                    
+                          <th>telefono</th>                                                    
                           <th> </th> 
                       </thead>     
                           <tbody>
@@ -565,7 +566,7 @@ const listaEquipos = (
                                   <td>{equipo.nombre}</td>
                                   <td>{equipo.status}</td>
                                   <td>{equipo.nombre_contacto}</td>
-                                  <td>Tel:{equipo.telefono_contacto} | Correo: {equipo.correo_contacto}</td>                                        
+                                  <td> {equipo.telefono_contacto} </td>                                        
                                   <td>
 
                                       <button  onClick={() => {setIdEquipo(equipo.id); setNombreEquipo(equipo.nombre)}} className="btn btn-outline-success" >
@@ -601,7 +602,7 @@ const listaEquipos = (
           ))
       }
 
-  </tbody>
+    </tbody>
   </table>
 
 
@@ -615,26 +616,6 @@ const listaJugadores = (
       <button  onClick={() => {setIdEquipo(''); setNombreEquipo('')}} className="btn btn-outline-success" >
           regresar
       </button> 
-
-
-      <div className="modal fade" id="MyConfirmationNOEliminarJugador" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">            
-      <div className="modal-dialog" role="document">
-          <div className="modal-content">
-          <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Mi Torneo</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div className="modal-body">
-              El jugador no puede ser eliminado porque ya tiene goles registrados
-          </div>
-          <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Salr</button>
-          </div>
-          </div>
-      </div>
-  </div>
 
 
       <table className="table table-striped">
@@ -676,7 +657,7 @@ const listaJugadores = (
 
           {                    
               jugadores
-              .filter(x => x.equipo === idEquipo)
+              .filter(x => x.equipoId === idEquipo)
               .map((player, ndx) =>(
                   <tr key={player.id}>
                       <td>{ndx+1} </td>
@@ -703,6 +684,11 @@ const listaJugadores = (
 
 
 
+
+
+//modales
+
+
   return (
     <>
         {
@@ -715,6 +701,8 @@ const listaJugadores = (
 
 
         {MyModal}
+        {MyModalFoto}
+        {MyModalConfirmation}
     </>
   )
 }

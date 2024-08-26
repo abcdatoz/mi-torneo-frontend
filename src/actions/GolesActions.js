@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { tokenConfig } from './auth'
 import { DELETE_GRUPO } from './GrupoActions';
+import { toast } from 'react-toastify'
 
 export const GET_GOLES = 'GET_GOLES';
 export const ADD_GOL = 'ADD_GOL';
@@ -50,5 +51,5 @@ export const deleteGol = (id) => (dispatch, getState)=>{
                 payload: id
             });            
         })
-        .catch(err => { console.log("error message :" + err.message) })
+        .catch(err => { toast.error("El gol no se puede eliminar")  })
 };

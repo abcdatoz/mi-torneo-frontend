@@ -8,19 +8,15 @@ import Login from './components/accounts/Login'
 import Register from './components/accounts/Register'
 import { Route, Switch, } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-
-import Home from './components/Home'
+import Home from './components/home/Home'
 import Bug from './components/Bug'
 
 import MiTorneo from './components/torneo/MiTorneo'
 import Equipos from './components/equipos/Equipos'
-
-
-
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import Juegos from './components/juegos/Juegos'
+import Rol from './components/rol/Rol'
 
 function App() {
 
@@ -31,9 +27,8 @@ function App() {
     <div className="App">
       <Header />
       
-
-
       <div className='container'>
+      
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
@@ -42,15 +37,13 @@ function App() {
           <PrivateRoute exact path="/bugs" component={Bug} />
           <PrivateRoute exact path="/torneos" component={MiTorneo} />
           <PrivateRoute exact path="/equipos" component={Equipos} />
-          
-          
-          
+          <PrivateRoute exact path="/juegos" component={Juegos} />
+          <PrivateRoute exact path="/rol" component={Rol} />
+                    
         </Switch>
 
       </div>
       
-      
-
       <ToastContainer />
 
     </div>

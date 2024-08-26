@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { tokenConfig } from './auth'
+import { toast } from 'react-toastify'
 
 export const GET_EQUIPOS = 'GET_EQUIPOS';
 export const ADD_EQUIPO = 'ADD_EQUIPO';
@@ -49,5 +50,7 @@ export const deleteEquipo = (id) => (dispatch, getState)=>{
                 payload: id
             });            
         })
-        .catch(err => { console.log("error message :" + err.message) })
+        .catch(err => {
+            toast.error('El equipo no puede ser eliminado')             
+        })
 };
