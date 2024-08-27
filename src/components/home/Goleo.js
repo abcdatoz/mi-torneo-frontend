@@ -19,9 +19,7 @@ const Goleo = (props) => {
 
     const generarGoleo = () => {
 
-
-        console.log('jugadores')
-        console.log(jugadores)
+ 
 
         let arr = []
         let goleadores = jugadores.filter(x => x.torneoId == props.idTorneo)
@@ -34,7 +32,7 @@ const Goleo = (props) => {
             let golesJugador = goles.filter(x => x.jugadorId == goleador.id)
 
             golesJugador.forEach(registro => {
-                ngoles = ngoles + registro.goles
+                ngoles = ngoles + parseInt(registro.goles)
             });
             
             let obj = {

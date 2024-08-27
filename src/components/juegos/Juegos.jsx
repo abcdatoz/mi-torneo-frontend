@@ -389,10 +389,10 @@ const Juegos = () => {
         registros.forEach(element => {
             
             if (element.equipoId == idTeamA)
-                xGolesA = xGolesA + element.goles
+                xGolesA = xGolesA + parseInt(element.goles)
 
             if (element.equipoId == idTeamB)
-                xGolesB = xGolesB + element.goles
+                xGolesB = xGolesB + parseInt(element.goles)
         });
 
 
@@ -440,7 +440,9 @@ const Juegos = () => {
 
 
         arreglo.forEach(element => {
-            suma = suma + element.goles 
+            //suma = suma + element.goles 
+            const goles = parseInt(element.goles); // O parseInt si necesitas un entero
+            suma += goles;
         });
         
         

@@ -19,15 +19,19 @@ class Header extends Component {
 
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
+                    <Nav> <div style={{ backgroundColor: 'white', width:'100px'}}></div> </Nav>
                     <Nav.Link href="/">Estadisticas</Nav.Link>
-                    <Nav> <div style={{ backgroundColor: 'white', width:'100px'}}>:::</div> </Nav>
+                    <Nav> <div style={{ backgroundColor: 'white', width:'100px'}}></div> </Nav>
                     <Nav.Link href="/torneos">Torneos</Nav.Link>
+                    <Nav> <div style={{ backgroundColor: 'white', width:'30px'}}> &nbsp;</div> </Nav>
                     <Nav.Link href="/equipos">Equipos</Nav.Link>
+                    <Nav> <div style={{ backgroundColor: 'white', width:'30px'}}> &nbsp;</div> </Nav>
                     <Nav.Link href="/juegos">Juegos</Nav.Link>
+                    <Nav> <div style={{ backgroundColor: 'white', width:'30px'}}> &nbsp;</div> </Nav>
                     <Nav.Link href="/rol">Nuevo Rol</Nav.Link>
                 </Nav>
                 
-                <Nav> <div style={{ backgroundColor: 'white', width:'500px'}}>:::</div> </Nav>
+                <Nav> <div style={{ backgroundColor: 'white', width:'300px'}}></div> </Nav>
                 
                 <Nav>
                     <Nav.Link href="#"><span><strong>{username ? `Usuario:  ${username}` : ""}</strong></span></Nav.Link>                    

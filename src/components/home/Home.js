@@ -15,6 +15,7 @@ import { getGoles } from '../../actions/GolesActions'
 import TablaGeneral from './TablaGeneral'
 import TablaPorGrupo from './TablaPorGrupo'
 import Goleo from './Goleo'
+import Tarjetero from './Tarjetero'
 import VerJornadas from './VerJornadas'
 import VerRol from './VerRol'
 import VerPendientes from './VerPendientes'
@@ -213,6 +214,10 @@ const Home = () => {
                             <button  onClick={() => { setTyp('goleo') }} className="btn btn-outline-primary" >
                                 Goleo
                             </button> 
+                
+                            <button  onClick={() => { setTyp('tarjetero') }} className="btn btn-outline-primary" >
+                                Tarjetero
+                            </button> 
 
                             <button  onClick={() => { setTyp('ver_jornadas') }} className="btn btn-outline-primary" >
                                 Jornadas
@@ -242,13 +247,14 @@ const Home = () => {
 
                             switch(typ) {
                                 
-                                case "ver_rol":             return <VerRol idTorneo={torneo} />;
-                                case "tabla_general":       return <TablaGeneral idTorneo={torneo} setTipo={setTyp} setTeam={setIdTeam} />;
-                                case "tabla_por_grupos":    return <TablaPorGrupo idTorneo={torneo} setTipo={setTyp} setTeam={setIdTeam} />;
-                                case "goleo":               return <Goleo idTorneo={torneo} />;
-                                case "ver_jornadas":        return <VerJornadas idTorneo={torneo} />;
-                                case "ver_juegos_pendientes":return <VerPendientes idTorneo={torneo} />;
-                                case "team":                return <Team idTorneo={torneo} idTeam={idTeam} />;
+                                case "ver_rol":                 return <VerRol idTorneo={torneo} />;
+                                case "tabla_general":           return <TablaGeneral idTorneo={torneo} setTipo={setTyp} setTeam={setIdTeam} />;
+                                case "tabla_por_grupos":        return <TablaPorGrupo idTorneo={torneo} setTipo={setTyp} setTeam={setIdTeam} />;
+                                case "goleo":                   return <Goleo idTorneo={torneo} />;
+                                case "tarjetero":               return <Tarjetero idTorneo={torneo} />;
+                                case "ver_jornadas":            return <VerJornadas idTorneo={torneo} />;
+                                case "ver_juegos_pendientes":   return <VerPendientes idTorneo={torneo} />;
+                                case "team":                    return <Team idTorneo={torneo} idTeam={idTeam} />;
                                 
 
                                 default:      return <h1>No ha seleccionado el torneo</h1>

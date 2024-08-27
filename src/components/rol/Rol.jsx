@@ -24,6 +24,10 @@ const Rol = () => {
     const [descansos, setDescansos] = useState([])    
     const [mode, setMode] = useState('new')
     
+     
+    const [secondMatchs, setSecondMatchs] = useState([])    
+    const [verSegundasPosibilidades, setVerSegundasPosibilidades] = useState(false)    
+
 
     const [fecha, setFecha] = useState('')
     const [hora, setHora] = useState('')
@@ -106,6 +110,65 @@ const Rol = () => {
     )
 
 
+    const cargarPosiblesPartidos = () => {
+
+        let equiposTorneo  = equipos.filter (x => x.torneoId == torneo && x.status == 'alta')
+
+        let arr = []
+
+        for(let i = 0; i < equiposTorneo.length; i++){            
+            let equipoLocal = equiposTorneo[i] 
+
+            let equiposContrarios = equiposTorneo.filter(x => x.id != equiposTorneo[i].id)
+
+            for(let j = 0; j < equiposContrarios.length; j++){
+                let equipoVisitante = equiposContrarios[j] 
+
+
+
+                let jjCount = matchs.filter(p => {
+
+                    if (
+                        (p.equipoA == equipoLocal.id && p.equipoB == equipoVisitante.id ) 
+                        || 
+                        (p.equipoB == equipoLocal.id && p.equipoA == equipoVisitante.id ) 
+                    ){
+                        return p
+                    }
+                })
+ 
+                if (jjCount.length > 0){
+
+                    let obj = {
+                        equipoA: equipoLocal.id,
+                        equipoB: equipoVisitante.id,
+                        nombreA: equipoLocal.nombre,
+                        nombreB: equipoVisitante.nombre,
+                        nvueltas: jjCount.length
+                    }
+
+                    arr.push(obj)
+
+                }else {
+                    let obj = {
+                        equipoA: equipoLocal.id,
+                        equipoB: equipoVisitante.id,
+                        nombreA: equipoLocal.nombre,
+                        nombreB: equipoVisitante.nombre,
+                        nvueltas: 0
+                    }
+                    arr.push(obj)
+                }
+            }
+
+
+
+        }
+        console.log('asdasdasdsad')
+        console.log (arr)
+        setSecondMatchs(arr)
+        
+    }
     
 
 
@@ -114,7 +177,7 @@ const Rol = () => {
 
         
         setNewRol([])
-
+        setVerSegundasPosibilidades(true)
         
         let ids = equipos
             .filter(x =>  x.torneoId == torneo && x.status == 'alta')  
@@ -178,10 +241,11 @@ const Rol = () => {
 
         JuegosTorneo.forEach(item => {
     
-         let eqA =  equipos.filter(z => z.id === item.equipoA)
-         let eqB =  equipos.filter(z => z.id === item.equipoB)
-    
-         arr.push({...item, nombreA: eqA[0].nombre, nombreB: eqB[0].nombre})
+            let eqA =  equipos.filter(z => z.id === item.equipoA)
+            let eqB =  equipos.filter(z => z.id === item.equipoB)
+        
+            arr.push({...item, nombreA: eqA[0].nombre, nombreB: eqB[0].nombre})
+
         })
     
         setMatchs(arr)     
@@ -363,7 +427,7 @@ const Rol = () => {
         });
 
         setMode('enviados')
-
+        setNewJornada([])
         toast.success('los juegos fueron generados satisfactoriamente')
 
     }
@@ -494,7 +558,53 @@ const Rol = () => {
                             
             
                                 </div>            
-                            </div>            
+                            </div>      
+                            <br /><br /><br />
+
+                            {
+
+                                verSegundasPosibilidades
+                                ? (
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <h3>Segunda ronda</h3>
+                                            <button  onClick={() => {cargarPosiblesPartidos()}} className="btn btn-outline-primary" >
+                                                partidos de la segunda vuelta
+                                            </button> 
+        
+                                            <br /><br />  
+                                            <table>
+                                            <thead> 
+                                                <th width="20%">Equipo Local</th>
+                                                <th width="20%">Equipo Visitante</th>
+                                                <th width="30%">Enrolar</th>                
+                                                
+                                            </thead>     
+                                            <tbody>
+                                                    {
+                                                        secondMatchs
+                                                        .filter (x => x.nvueltas == 1)
+                                                        .map( (sx, ndx)=> (
+                                                            <tr key={ndx}>
+                                                            
+                                                            <td>{sx.nombreA}</td>
+                                                            <td>{sx.nombreB}</td>
+                                                            <td> 
+                                                                <button  onClick={() => { enrolar(sx) }} className="btn btn-outline-success" >
+                                                                    enrolar
+                                                                </button>      
+                                                            </td>
+                                                        </tr>
+                                                        ))
+                                                    }
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div> 
+                                )
+                                : null 
+                            }
+         
                         </div>            
         
         

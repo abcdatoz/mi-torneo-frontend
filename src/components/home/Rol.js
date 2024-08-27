@@ -22,7 +22,10 @@ const Rol = () => {
     const [newRol, setNewRol] = useState([])    
     const [descansos, setDescansos] = useState([])    
     const [mode, setMode] = useState('new')
+
     
+    //segunda vuelta
+    const [posiblesPartidos, setPosiblesPartidos] = useState([])   
 
     const [fecha, setFecha] = useState('')
     const [hora, setHora] = useState('')
@@ -496,7 +499,13 @@ const Rol = () => {
                             
             
                                 </div>            
-                            </div>            
+                            </div>       
+
+                            <div className="row">
+                                <div className="col-6">
+                                    <h3>Segunda ronda</h3>
+                                </div>
+                            </div>     
                         </div>            
         
         
