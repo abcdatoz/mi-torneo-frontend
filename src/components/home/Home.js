@@ -7,6 +7,7 @@ import { getEquipos } from '../../actions/EquipoActions'
 import { getEquipoEscudo } from '../../actions/EquipoEscudoActions'
 import { getEquipoFoto } from '../../actions/EquipoFotoActions'
 import { getJugadores } from '../../actions/JugadorActions'
+import { getJugadorFoto } from '../../actions/JugadorFotoActions'
 import { getJornadas } from '../../actions/JornadaActions'
 import { getJuegos } from '../../actions/JuegosActions'
 import { getGoles } from '../../actions/GolesActions'
@@ -47,6 +48,7 @@ const Home = () => {
     const equipos = useSelector(state => state.equipos.lista)
     const equiposEscudo = useSelector(state => state.equipos.lista)
     const equiposFoto = useSelector(state => state.equipos.lista)
+    const jugadoresFoto = useSelector(state => state.jugadoresFoto.lista)
 
     const jornadas = useSelector(state => state.jornadas.lista)
     const juegos = useSelector(state => state.juegos.lista)
@@ -73,6 +75,7 @@ const Home = () => {
          
         dispatch(getEquipoFoto())
         dispatch(getEquipoEscudo())
+        dispatch(getJugadorFoto())
        
     },[])
 

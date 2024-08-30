@@ -299,7 +299,7 @@ const Juegos = () => {
             //    return
             //}
 
-            if (goles.filter(x => x.juego == idJuego && x.equipo == idTeamA && x.jugador == jugadorA).length > 0){
+            if (goles.filter(x => x.juegoId == idJuego && x.equipoId == idTeamA && x.jugadorId == jugadorA).length > 0){
                 toast.warning('Ese jugador ya fue registrado anteriormente en este partido')
                 return
             }
@@ -333,7 +333,7 @@ const Juegos = () => {
 //                return
 //            }
 
-            if (goles.filter(x => x.juego == idJuego && x.equipo == idTeamA && x.jugador == jugadorB).length > 0){
+            if (goles.filter(x => x.juegoId == idJuego && x.equipoId == idTeamA && x.jugadorId == jugadorB).length > 0){
                 toast.warning('Ese jugador ya fue registrado anteriormente en este partido')
                 return
             }
@@ -355,13 +355,73 @@ const Juegos = () => {
             setGolB(0)
             setAmarillaB(0)
             setRojaB(0)
+        }        
+        
+    }
+
+
+    const  addJugadoresRestantes = (typ) => {
+
+        if (typ == 'A'){
+
+            let jugadoresEquipoA = jugadores.filter (p => p.equipoId == idTeamA)
+            let jugadoresRegistradosA = goles
+                                            .filter (x => x.juegoId == idJuego && x.equipoId == idTeamA)
+                                            .map ( p =>  p.jugadorId)
+
+
+            jugadoresEquipoA.forEach (element => {
+
+                let existe = jugadoresRegistradosA.includes(element.id)
+
+                if(!existe){
+
+                     let dataA = {
+                        torneo,
+                        juego: idJuego,            
+                        equipo: idTeamA,
+                        jugador: element.id,
+                        goles: 0,
+                        tarjetas_amarillas: 0,
+                        tarjeta_roja: 0           
+                    }            
+                    dispatch(addGol(dataA))   
+
+                }
+
+            })
+        }
+
+        if (typ == 'B'){
+
+            let jugadoresEquipoB = jugadores.filter (p => p.equipoId == idTeamB)
+            let jugadoresRegistradosB = goles
+                                            .filter (x => x.juegoId == idJuego && x.equipoId == idTeamB)
+                                            .map ( p =>  p.jugadorId)
+
+            jugadoresEquipoB.forEach (element => {
+                let existe = jugadoresRegistradosB.includes(element.id)
+
+                if(!existe){
+
+                     let dataB = {
+                        torneo,
+                        juego: idJuego,            
+                        equipo: idTeamB,
+                        jugador: element.id,
+                        goles: 0,
+                        tarjetas_amarillas: 0,
+                        tarjeta_roja: 0           
+                    }            
+                    dispatch(addGol(dataB))   
+
+                }
+            })
+
+
         }
 
 
-        
-        
-        
-        
     }
 
     const eliminarGol = (id) => {
@@ -895,13 +955,20 @@ const Juegos = () => {
                                         </tr>
                                     ))
                                 }
-
-
-                                
                                             
                             </tbody>
                         </table>
                         
+                        
+                        {
+                            statusJuego == 'Finalizado'
+                            ? null
+                            : 
+                                <button type="button" className="btn btn-outline-primary" onClick={ () => { addJugadoresRestantes('A') }}>
+                                        Agregar demas jugadores
+                                </button>
+                        
+                        }
 
                     
                     </div>
@@ -1040,13 +1107,21 @@ const Juegos = () => {
                                             <td></td>
                                         </tr>
                                     ))
-                                }
-
-
-                            
-                                            
+                                }                                            
                             </tbody>
                         </table>
+                        
+                        {
+                            statusJuego == 'Finalizado'
+                            ? null
+                            : 
+                                <button type="button" className="btn btn-outline-primary" onClick={ () => { addJugadoresRestantes('B') }}>
+                                        Agregar demas jugadores
+                                </button>
+                        
+                        }
+
+
                   
 
 

@@ -19,6 +19,7 @@ const Team = (props) => {
     const goles = useSelector(state => state.goles.lista)
     const equiposEscudo = useSelector(state => state.equiposEscudo.lista)
     const equiposFoto = useSelector(state => state.equiposFoto.lista)
+    const jugadoresFoto = useSelector(state => state.jugadoresFoto.lista)
 
     const jornadas = useSelector(state => state.jornadas.lista)
     const juegos = useSelector(state => state.juegos.lista)
@@ -36,18 +37,27 @@ const Team = (props) => {
 
         goleadores.forEach(goleador => {
             let ngoles = 0    
+            let nAmarillas = 0
+            let nRojas = 0 
+            let nJuegos = 0
 
 
             let golesJugador = goles.filter(x => x.jugadorId == goleador.id)
 
             golesJugador.forEach(registro => {
-                ngoles = ngoles + registro.goles
+                ngoles = ngoles + parseInt(registro.goles)
+                nAmarillas = nAmarillas + parseInt(registro.tarjetas_amarillas)
+                nRojas = nRojas + parseInt(registro.tarjeta_roja)
+                nJuegos = nJuegos + 1
             });
             
             let obj = {                
                 id: goleador.id,
                 jugador: goleador.nombre,
-                ngoles,                
+                ngoles,              
+                nAmarillas,
+                nRojas,
+                nJuegos  
             }
 
             arr.push(obj)
@@ -148,7 +158,7 @@ const Team = (props) => {
 
 
     const showPhoto = (id) => {
-        let arr = equiposFoto.filter(x => x.equipo == id)
+        let arr = equiposFoto.filter(x => x.equipoId == id)
 
         if (arr.length > 0 ){
             return (
@@ -161,11 +171,25 @@ const Team = (props) => {
     }
 
     const showShield = (id) => {
-        let arr = equiposEscudo.filter(x => x.equipo == id)
+        let arr = equiposEscudo.filter(x => x.equipoId == id)
 
         if (arr.length > 0 ){
             return (
                 <img src={"http://localhost:8090/api/resources/" + arr[0].imagen}  alt="imagen" width="90px" height="120px"/>
+            )
+
+        }else{
+            return null
+        }
+    }
+
+
+    const showPhotoJugador = (id) => {
+        let arr = jugadoresFoto.filter(x => x.jugadorId == id)
+
+        if (arr.length > 0 ){
+            return (
+                <img src={"http://localhost:8090/api/resources/" + arr[0].imagen}  alt="imagen"  width="100px" height="100px"/>
             )
 
         }else{
@@ -200,8 +224,12 @@ const Team = (props) => {
                 <thead>
                     <tr>
                         <th width="10%"></th>                        
-                        <th width="40%"><h5>Jugadores</h5></th>
-                        <th width="10%"></th>
+                        <th width="10%"></th>                        
+                        <th width="30%"><h5>Jugadores</h5></th>
+                        <th width="10%">Goles</th>
+                        <th width="10%">T. Amarillas</th>
+                        <th width="10%">T. Rojas</th>
+                        <th width="10%">Juegos Jugados</th>
                                   
                         
                     </tr>
@@ -212,8 +240,12 @@ const Team = (props) => {
                     .map((item, indx) =>  (
                         <tr key={item.id}  >
                             <td> {indx + 1}  </td>                                
+                            <td> {showPhotoJugador(item.id) }  </td>                                
                             <td>{item.jugador}</td>
                             <td>{item.ngoles} Goles </td>                                                       
+                            <td>{item.nAmarillas}  </td>                                                       
+                            <td>{item.nRojas}  </td>                                                       
+                            <td>{item.nJuegos} Juegos </td>                                                       
                         </tr>
                     ))                    
                 }

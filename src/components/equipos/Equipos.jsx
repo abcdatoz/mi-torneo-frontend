@@ -4,10 +4,11 @@ import {getTorneos} from '../../actions/TorneoActions'
 import {getGrupos} from '../../actions/GrupoActions'
 import {getEquipos, addEquipo, editEquipo, deleteEquipo} from '../../actions/EquipoActions'
 import {getJugadores, addJugador,editJugador,deleteJugador} from '../../actions/JugadorActions'
-import { getEquipoEscudo, addEquipoEscudo, deleteEquipoEscudo} from '../../actions/EquipoEscudoActions'
-import { getEquipoFoto, addEquipoFoto,deleteEquipoFoto} from '../../actions/EquipoFotoActions'
+import {getEquipoEscudo, addEquipoEscudo, deleteEquipoEscudo} from '../../actions/EquipoEscudoActions'
+import {getEquipoFoto, addEquipoFoto,deleteEquipoFoto} from '../../actions/EquipoFotoActions'
+import {getJugadorFoto, addJugadorFoto,deleteJugadorFoto} from '../../actions/JugadorFotoActions'
 import {getJuegos} from '../../actions/JuegosActions'
-import { getGoles  } from '../../actions/GolesActions'
+import {getGoles  } from '../../actions/GolesActions'
 
 import { Container, Row, Col, InputGroup, Modal,Form , Button} from 'react-bootstrap'
 import { toast } from 'react-toastify'
@@ -35,8 +36,10 @@ const Equipos = () => {
 
 
   const [idEquipoImage, setIdEquipoImage] = useState('')
+  const [idJugadorImage, setIdJugadorImage] = useState('')
   const [tipoImagen, setTipoImagen] = useState('')
   const [imagen, setImagen] = useState('')
+  const [imagenJugador, setImagenJugador] = useState('')
 
   //useSelectors
   const auth = useSelector(state => state.auth)    
@@ -49,6 +52,7 @@ const Equipos = () => {
 
   const equiposFoto = useSelector(state => state.equiposFoto.lista)
   const equiposEscudo = useSelector(state => state.equiposEscudo.lista)
+  const jugadoresFoto = useSelector(state => state.jugadoresFoto.lista)
 
   //useDispatch
   const dispatch = useDispatch()
@@ -57,10 +61,12 @@ const Equipos = () => {
   const [showMyModal, setshowMyModal] = useState(false)
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
   const [showMyModalFoto, setshowMyModalFoto] = useState(false)
+  const [showMyModalPicture, setshowMyModalPicture] = useState(false)
    
   const closeModal = (e) => { setshowMyModal(false); }
   const closeConfirmationDelete = (e) => { setShowConfirmationDelete(false)  }
   const closeModalFoto = (e) => { setshowMyModalFoto(false); }
+  const closeModalPicture = (e) => { setshowMyModalPicture(false); }
  
   
 
@@ -205,6 +211,44 @@ const guardarImagen = (e) => {
 
 }
 
+
+
+const editarImagenJugador = (id) =>{
+    setIdJugadorImage(id)
+    setshowMyModalPicture(true)    
+}
+
+const guardarImagenJugador = (e) => {
+
+    e.preventDefault()
+
+    if (!imagenJugador){            
+        alert('No ha seleccionado la imagen')
+        return
+    }
+
+
+    let formdata = new FormData()
+
+    
+    formdata.append('jugador', idJugadorImage)
+    formdata.append('imagen', imagenJugador, imagenJugador.name)
+
+  
+
+    let arrFotos = jugadoresFoto.filter(x => x.jugadorId == setIdJugadorImage)
+    
+    arrFotos.forEach(element => {
+        dispatch(deleteJugadorFoto(element.id))    
+    });
+
+    dispatch(addJugadorFoto(formdata))       
+
+    
+    setshowMyModalPicture(false)
+
+}
+
 const guardar = (e) => {
     e.preventDefault()
 
@@ -301,6 +345,19 @@ const showShield = (id) => {
     }
 }
 
+
+const showPhotoJugador = (id) => {
+    let arr = jugadoresFoto.filter(x => x.jugadorId == id)
+
+    if (arr.length > 0 ){
+        return (             
+            <img src={"http://localhost:8090/api/resources/" + arr[0].imagen}  alt="imagen" width="50px" height="50px"/>
+        )
+
+    }else{
+        return null
+    }
+}
 
 const listatorneos = (<>
   <h5>Mis Torneos </h5>
@@ -512,6 +569,60 @@ const MyModalFoto = (
     </>
     )
 
+
+    const MyModalPicture = (
+        <>
+            <Modal show={showMyModalPicture} onHide={closeModalPicture} size='lg'>
+                <Modal.Header closeButton>
+                <Modal.Title>Cargar Foto Jugador </Modal.Title> 
+                </Modal.Header> 
+        
+                <Modal.Body>            
+                
+      
+      
+                  
+       
+      
+                    <InputGroup className="mb-2">
+                        <InputGroup.Text>Seleccione la imagen</InputGroup.Text>
+                            <input 
+                                  className="form-control"
+                                  type="file"
+                                  name="imagen"
+                                  accept="image/png, image/jpeg"
+                                  onChange = { e => setImagenJugador(e.target.files[0])}
+                                  required
+                            />
+    
+                    </InputGroup>
+       
+                </Modal.Body>
+            
+                <Modal.Footer>
+                    <Container>
+                        <Row>           
+                            <Col xs={8}></Col>                               
+      
+                            <Col xs={2}>                        
+                                <Button inverted color="green" onClick={guardarImagenJugador}>
+                                    Guardar
+                                </Button>                        
+                            </Col>
+                            <Col xs={2}>
+                                <Button  onClick={closeModalFoto}>
+                                    Cancelar
+                                </Button>
+                            </Col>
+                            
+                        </Row>
+                    </Container>
+                </Modal.Footer>
+            </Modal>
+        </>
+        )
+
+
 const listaEquipos = (
   <>        
       <h5>{ nombreTorneo }</h5>
@@ -621,13 +732,16 @@ const listaJugadores = (
       <table className="table table-striped">
           <thead>
               <th>#</th>
+              <th></th>
               <th>Nombre</th>
               <th>Status</th>                
+              <th> </th> 
               <th> </th> 
           </thead>     
           <tbody>
 
               <tr>
+                  <td></td>
                   <td></td>
                   <td>
                       <input 
@@ -637,7 +751,7 @@ const listaJugadores = (
                           name="jugadorNombre"                                    
                           onChange = { e => setJugadorNombre(e.target.value)  }
                           value={jugadorNombre}                                                                         
-                      />
+                          />
                   </td>
                   <td>
                           <select className="form-control"
@@ -649,6 +763,7 @@ const listaJugadores = (
                           </select> 
 
                   </td>
+                  <td></td>
                   <td>
                       <button type="button" className="btn btn-primary" onClick={agregarJugador}>Agregar</button>
                   </td>
@@ -661,6 +776,7 @@ const listaJugadores = (
               .map((player, ndx) =>(
                   <tr key={player.id}>
                       <td>{ndx+1} </td>
+                      <td>{ showPhotoJugador(player.id) }</td>
                       <td>{player.nombre} </td>
                       <td>{player.status} </td>
                       <td>
@@ -672,6 +788,12 @@ const listaJugadores = (
                               <span className="fa fa-trash" aria-hidden="true"></span>
                           </button>                                                                        
                       </td>
+                      
+                      <td>
+                            <button  onClick={() => editarImagenJugador(player.id) } className="btn btn-outline-success" >
+                                foto
+                            </button>   
+                       </td>
                   </tr>
               ))
           }
@@ -685,8 +807,6 @@ const listaJugadores = (
 
 
 
-
-//modales
 
 
   return (
@@ -702,6 +822,7 @@ const listaJugadores = (
 
         {MyModal}
         {MyModalFoto}
+        {MyModalPicture}
         {MyModalConfirmation}
     </>
   )

@@ -10,6 +10,7 @@ import equiposFoto from './EquipoFotoReducer'
 import equiposEscudo from './EquipoEscudoReducer'
 import jornadas from './JornadaReducer'
 import jugadores from './JugadorReducer'
+import jugadoresFoto from './JugadorFotoReducer'
 import juegos from './JuegoReducer'
 import goles from './GolReducer'
 
@@ -23,6 +24,7 @@ export default combineReducers({
     equiposEscudo,
     jornadas,
     jugadores,
+    jugadoresFoto,
     juegos,
     goles    
 })
