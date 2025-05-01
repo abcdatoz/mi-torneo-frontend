@@ -36,7 +36,7 @@ const Tarjetero = (props) => {
                 equipo: equipos.filter(x => x.id == jugador.equipoId)[0].nombre,
                 jugador: jugador.nombre,
                 ncards,
-                id:  jugador.equipo
+                id:  jugador.equipoId
             }
 
             if(ncards > 0){
@@ -78,7 +78,7 @@ const Tarjetero = (props) => {
 
 
     const showShield = (id) => {
-        let arr = equiposEscudo.filter(x => x.equipo == id)
+        let arr = equiposEscudo.filter(x => x.equipoId == id)
 
         if (arr.length > 0 ){
             return (

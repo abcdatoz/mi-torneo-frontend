@@ -39,7 +39,7 @@ const Goleo = (props) => {
                 equipo: equipos.filter(x => x.id == goleador.equipoId)[0].nombre,
                 jugador: goleador.nombre,
                 ngoles,
-                id:  goleador.equipo
+                id:  goleador.equipoId
             }
 
             if (equipos.filter(x=>x.id == goleador.equipoId)[0].status == 'alta' ){
@@ -72,7 +72,8 @@ const Goleo = (props) => {
 
 
     const showShield = (id) => {
-        let arr = equiposEscudo.filter(x => x.equipo == id)
+        let arr = equiposEscudo.filter(x => x.equipoId == id)
+        
 
         if (arr.length > 0 ){
             return (
